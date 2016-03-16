@@ -94,6 +94,12 @@ public class Face {
 	}
 
 	
-	
+	public Emotion getFirstEmotion(){
+		if(emotionList.size()>0){
+			Emotion strz[] = (Emotion[])emotionList.toArray();
+			return strz[1];
+		}
+		return null;
+	}
 
 }

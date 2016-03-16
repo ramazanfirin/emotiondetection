@@ -5,7 +5,9 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	>
 <h:body>
 
 	<ui:composition template="/WEB-INF/tags/layout.xhtml">
@@ -14,14 +16,116 @@
 
 			<div class="well well-lg">
 			
-					
+				<h:form id="form">	
 				<p:fieldset legend="Home Page" toggleable="false" toggleSpeed="500">
-					<center>
-					<img width="70"  src ="http://www.primefaces.org/showcase/javax.faces.resource/main/images/logoBlue.svg.xhtml" />
-					</center>	
+					<h:outputLabel value="Number of Images:"></h:outputLabel>
+					<h:outputLabel value="#{reportMB.imageCount}"></h:outputLabel>
+					<br></br>
+					<h:outputLabel value="Number of Faces:"></h:outputLabel>
+					<h:outputLabel value="#{reportMB.faceCount}"></h:outputLabel><br></br>
+					<br></br>
+					<h:outputLabel value="Number of Emotion:"></h:outputLabel>
+					<h:outputLabel value="#{reportMB.emotionCount}"></h:outputLabel>
+					
 				</p:fieldset>
+				
+				<p:dataTable var="car" value="#{reportMB.imageList}" rows="10" selectionMode="single" selection="#{reportMB.selectedImage}"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15" rowKey="#{car.id}">
+        
+        <p:ajax event="rowSelect" listener="#{reportMB.onRowSelect}" update=":form:multiCarDetail" oncomplete="PF('multiCarDialog').show()"></p:ajax>
+        <p:column headerText="Id">
+           <p:commandLink  oncomplete="PF('multiCarDialog').show()" icon="ui-icon-search" title="View">
+                 <p:graphicImage url="http://localhost:8080/snapshots/#{car.fileName}" cache="false"> </p:graphicImage>
+                <f:setPropertyActionListener value="#{car}" target="#{reportMB.selectedImage}" />
+            </p:commandLink>
+           
+           
+        </p:column>
+        
+         <p:column headerText="Name">
+             <h:outputText value="#{car.fileName}" />
+        </p:column>
+ 
+        <p:column headerText="Inset Date">
+            <h:outputText value="#{car.insertDate}" />
+        </p:column>
+ 
+ 		<p:column headerText="Face Count">
+            <h:outputText value="#{car.faceCount}" />
+        </p:column>
+        
+ 
+       
+    </p:dataTable>
+				
+				<p:dialog header="Selected Cars" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true" width="500">
+        <p:outputPanel id="multiCarDetail" style="text-align:center;">
+             <p:graphicImage url="http://localhost:8080/snapshots/#{reportMB.selectedImage.fileName}" cache="false" rendered="#{not empty reportMB.selectedImage}"> </p:graphicImage>
+             <p:dataTable var="car" value="#{reportMB.emotionList}" rows="10">
+             
+             	<p:column headerText="Face No">
+             		<h:outputText value="#{car.face.id}" />
+       			 </p:column>
+             
+             	<p:column headerText="contempt">
+             		<h:outputText value="#{car.contempt}" >
+       			 
+       			 	<f:convertNumber minFractionDigits="2" />
+       			 	</h:outputText>
+       			 </p:column>
+       			 
+       			 <p:column headerText="surprise">
+             		<h:outputText value="#{car.surprise}" >
+             		<f:convertNumber minFractionDigits="2" />
+       			 	</h:outputText>
+       			 </p:column>
+       			 
+       			 <p:column headerText="happiness">
+             		<h:outputText value="#{car.happiness}" >
+             		<f:convertNumber minFractionDigits="2" />
+       			 	</h:outputText>
+       			 </p:column>
+       			 
+       			 <p:column headerText="neutral">
+             		<h:outputText value="#{car.neutral}" >
+             		<f:convertNumber minFractionDigits="2" />
+       			 	</h:outputText>
+       			 </p:column>
+       			 
+       			 <p:column headerText="sadness">
+             		<h:outputText value="#{car.sadness}" >
+             		<f:convertNumber minFractionDigits="2" />
+       			 	</h:outputText>
+       			 </p:column>
+       			 
+       			 <p:column headerText="disgust">
+             		<h:outputText value="#{car.disgust}" >
+             		<f:convertNumber minFractionDigits="2" />
+       			 	</h:outputText>
+       			 </p:column>
+       			 
+       			 <p:column headerText="anger">
+             		<h:outputText value="#{car.anger}" >
+             		<f:convertNumber minFractionDigits="2" />
+       			 	</h:outputText>
+       			 </p:column>
+       			 
+       			 <p:column headerText="fear">
+             		<h:outputText value="#{car.fear}" >
+             		<f:convertNumber minFractionDigits="2" />
+       			 	</h:outputText>
+       			 </p:column>
+             </p:dataTable>
+             
+        </p:outputPanel>
+    </p:dialog>
+				
+				</h:form>
+				
 			</div>
-#{}
+
 		</ui:define>
 	</ui:composition>
 

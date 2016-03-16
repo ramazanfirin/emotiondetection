@@ -1,6 +1,7 @@
 package org.slevin.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -57,8 +58,12 @@ public static List<Face> parseEmotionResult(String string) throws ParseException
 		emotion.setNeutral(new Double(neutral));
 		emotion.setSadness(new Double(sadness));
 		emotion.setSurprise(new Double(surprise));
+		emotion.setInsertDate(new Date());
+		emotion.setInsertTime(new Date());
+		emotion.setInsertDateTime(new Date());
 		
-		calculateResultEMotion(emotion);
+		String resultEmotion = calculateResultEMotion(emotion);
+		emotion.setResult(resultEmotion);
 		
 		face.getEmotionList().add(emotion);
 		faceList.add(face);
@@ -68,7 +73,50 @@ public static List<Face> parseEmotionResult(String string) throws ParseException
 	
 }
 
-public static void calculateResultEMotion(Emotion emotion){
+public static String calculateResultEMotion(Emotion emotion){
+	double temp=0;
+	String result="";
+	if(emotion.getAnger()>temp){
+		temp = emotion.getAnger();
+		result= "Anger";
+	}
+	
+	if(emotion.getContempt()>temp){
+		temp = emotion.getContempt();
+		result= "Contempt";
+	}
+	
+	if(emotion.getDisgust()>temp){
+		temp = emotion.getDisgust();
+		result= "Disgust";
+	}
+	
+	if(emotion.getFear()>temp){
+		temp = emotion.getFear();
+		result= "Fear";
+	}
+	
+	if(emotion.getHappiness()>temp){
+		temp = emotion.getHappiness();
+		result= "Happiness";
+	}
+	
+	if(emotion.getNeutral()>temp){
+		temp = emotion.getNeutral();
+		result= "Neutral";
+	}
+	
+	if(emotion.getSadness()>temp){
+		temp = emotion.getSadness();
+		result= "Sadness";
+	}
+	
+	if(emotion.getSurprise()>temp){
+		temp = emotion.getSurprise();
+		result= "Surprise";
+	}
+	
+	return result;
 	
 }
 }

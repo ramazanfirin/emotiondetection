@@ -1,15 +1,14 @@
 package org.slevin.common;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="EMOTION")
@@ -41,7 +40,15 @@ public class Emotion {
 	private String result;
 	
 	
-
+	@Temporal(TemporalType.TIMESTAMP)
+	private java.util.Date insertDateTime;
+	
+	@Temporal(TemporalType.DATE)
+	private java.util.Date insertDate;
+	    
+	@Temporal(TemporalType.TIME)
+	private java.util.Date insertTime;
+	
 	public Long getId() {
 		return id;
 	}
@@ -129,6 +136,32 @@ public class Emotion {
 	public void setFace(Face face) {
 		this.face = face;
 	}
+
+	public java.util.Date getInsertDate() {
+		return insertDate;
+	}
+
+	public void setInsertDate(java.util.Date insertDate) {
+		this.insertDate = insertDate;
+	}
+
+	public java.util.Date getInsertTime() {
+		return insertTime;
+	}
+
+	public void setInsertTime(java.util.Date insertTime) {
+		this.insertTime = insertTime;
+	}
+
+	public java.util.Date getInsertDateTime() {
+		return insertDateTime;
+	}
+
+	public void setInsertDateTime(java.util.Date insertDateTime) {
+		this.insertDateTime = insertDateTime;
+	}
+
+	
 	
 	
 }

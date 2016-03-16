@@ -58,8 +58,8 @@ public class DetectMB implements Serializable {
 	@PostConstruct
     public void init() {
 		//refreshList();
-		scheduler = Executors.newSingleThreadScheduledExecutor();
-		scheduler.scheduleAtFixedRate(new TakePictureJob(), 0, 5, TimeUnit.SECONDS);
+//		scheduler = Executors.newSingleThreadScheduledExecutor();
+//		scheduler.scheduleAtFixedRate(new TakePictureJob(), 0, 5, TimeUnit.SECONDS);
     }
 	
 	
@@ -75,16 +75,19 @@ public class DetectMB implements Serializable {
 	    		Webcam webcam = Webcam.getDefault();
 	    		webcam.open();
 	    		BufferedImage image = webcam.getImage();
-	    		String path=recordPath+System.currentTimeMillis()+".png";
+	    		String fileName=System.currentTimeMillis()+".png";
+	    		String path=recordPath+fileName;
 	    		ImageIO.write(image, "PNG", new File(path));
 	    		System.out.println(path+ " kaydedildi.");
 	    		
 	    		Image imageObject = new Image();
 	    		imageObject.setInsertDate(new Date());
 	    		imageObject.setPath(path);
+	    		imageObject.setFileName(fileName);
 	    		imageService.persist(imageObject);
 	    		
 	    		List<DetectedFace> faces = detector.detectFaces(ImageUtilities.createFImage(image));
+	    		imageObject.setFaceCount(new Long(faces.size()));
 	    		if(faces.size()>0){
 	    			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    			ImageIO.write(image, "PNG", baos);
@@ -96,8 +99,11 @@ public class DetectMB implements Serializable {
 	    			List<Face> list = EmotionUtil.parseEmotionResult(result);
 	    			imageObject.getFacelist().addAll(list);
 	    			
-	    			imageService.merge(imageObject);
+	    			
+	    			
 	    		}
+	    		
+	    		imageService.merge(imageObject);
 	    		
 	    		
 			} catch (Exception e) {

@@ -6,14 +6,13 @@ import java.util.LinkedHashSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.slevin.common.Item;
 
 @Entity
 @Table(name="IMAGE")
@@ -26,11 +25,13 @@ public class Image {
 	
 	private String path;
 	
-	private String reference;
+	private String fileName;
 	
 	private Date insertDate;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	private Long faceCount;
+	
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinColumn(name="IMAGE_ID")
 	private Collection<Face> facelist = new LinkedHashSet<Face>();
 
@@ -50,14 +51,6 @@ public class Image {
 		this.path = path;
 	}
 
-	public String getReference() {
-		return reference;
-	}
-
-	public void setReference(String reference) {
-		this.reference = reference;
-	}
-
 	public Date getInsertDate() {
 		return insertDate;
 	}
@@ -72,6 +65,22 @@ public class Image {
 
 	public void setFacelist(Collection<Face> facelist) {
 		this.facelist = facelist;
+	}
+
+	public Long getFaceCount() {
+		return faceCount;
+	}
+
+	public void setFaceCount(Long faceCount) {
+		this.faceCount = faceCount;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	
