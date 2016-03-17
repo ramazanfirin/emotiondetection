@@ -60,6 +60,8 @@ public class EntityService<E>  implements EntityDao<E> {
 	public List<E> findInRange(int firstResult, int maxResults) throws Exception {
         return getEntityManager().createQuery("Select t from " + getEntityClass().getSimpleName() + " t").setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
 	}
+	
+	
 
 	@Transactional(readOnly = true)
 	public long count() throws Exception {

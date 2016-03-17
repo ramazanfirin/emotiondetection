@@ -19,29 +19,28 @@
 				<h:form id="form">	
 				<p:fieldset legend="Home Page" toggleable="false" toggleSpeed="500">
 					<h:outputLabel value="Number of Images:"></h:outputLabel>
-					<h:outputLabel value="#{reportMB.imageCount}"></h:outputLabel>
+					<h:outputLabel id="imageCount" value="#{reportMB.imageCount}"></h:outputLabel>
 					<br></br>
 					<h:outputLabel value="Number of Faces:"></h:outputLabel>
-					<h:outputLabel value="#{reportMB.faceCount}"></h:outputLabel><br></br>
+					<h:outputLabel id="faceCount" value="#{reportMB.faceCount}"></h:outputLabel><br></br>
 					<br></br>
 					<h:outputLabel value="Number of Emotion:"></h:outputLabel>
-					<h:outputLabel value="#{reportMB.emotionCount}"></h:outputLabel>
+					<h:outputLabel id="emotionCount" value="#{reportMB.emotionCount}"></h:outputLabel>
 					
 				</p:fieldset>
 				
-				<p:dataTable var="car" value="#{reportMB.imageList}" rows="10" selectionMode="single" selection="#{reportMB.selectedImage}"
+				<p:commandButton value="Listele" update="table,imageCount,faceCount,emotionCount" action="#{reportMB.list}"></p:commandButton>
+				<h:selectBooleanCheckbox value="#{reportMB.showOnlyFace}"></h:selectBooleanCheckbox>
+				<h:outputLabel value="Sadece Yüz olanları Göster"></h:outputLabel>
+				<p:dataTable id="table" var="car" value="#{reportMB.imageList}" rows="10" selectionMode="single" selection="#{reportMB.selectedImage}"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="5,10,15" rowKey="#{car.id}">
         
         <p:ajax event="rowSelect" listener="#{reportMB.onRowSelect}" update=":form:multiCarDetail" oncomplete="PF('multiCarDialog').show()"></p:ajax>
         <p:column headerText="Id">
-           <p:commandLink  oncomplete="PF('multiCarDialog').show()" icon="ui-icon-search" title="View">
-                 <p:graphicImage url="http://localhost:8080/snapshots/#{car.fileName}" cache="false"> </p:graphicImage>
-                <f:setPropertyActionListener value="#{car}" target="#{reportMB.selectedImage}" />
-            </p:commandLink>
-           
-           
+                 <p:graphicImage url="http://localhost:8080/snapshots/#{car.fileName}" cache="false" width="150" height="150"> </p:graphicImage>
+               
         </p:column>
         
          <p:column headerText="Name">
@@ -60,7 +59,7 @@
        
     </p:dataTable>
 				
-				<p:dialog header="Selected Cars" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true" width="500">
+				<p:dialog header="Emotions" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true" width="700">
         <p:outputPanel id="multiCarDetail" style="text-align:center;">
              <p:graphicImage url="http://localhost:8080/snapshots/#{reportMB.selectedImage.fileName}" cache="false" rendered="#{not empty reportMB.selectedImage}"> </p:graphicImage>
              <p:dataTable var="car" value="#{reportMB.emotionList}" rows="10">

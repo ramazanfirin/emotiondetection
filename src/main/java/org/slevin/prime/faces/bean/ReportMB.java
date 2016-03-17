@@ -53,16 +53,22 @@ public class ReportMB implements Serializable {
 	
 	List<Emotion> emotionList; 
 	
+	Boolean showOnlyFace;
 
 	@PostConstruct
     public void init() throws Exception {
 		imageCount = imageService.count();
 		faceCount = faceService.count();
 		emotionCount = emotionService.count();
-		
-		imageList = imageService.findInRange(0, 1000);
     }
 
+	public void list() throws Exception{
+		imageCount = imageService.count();
+		faceCount = faceService.count();
+		emotionCount = emotionService.count();
+		
+		imageList = imageService.findInRange(0, 1000,showOnlyFace);
+	}
 	
 	public void onRowSelect(SelectEvent event) throws Exception {
 		selectedImage=(Image) event.getObject();
@@ -174,6 +180,14 @@ public class ReportMB implements Serializable {
 
 	public void setEmotionList(List<Emotion> emotionList) {
 		this.emotionList = emotionList;
+	}
+
+	public Boolean getShowOnlyFace() {
+		return showOnlyFace;
+	}
+
+	public void setShowOnlyFace(Boolean showOnlyFace) {
+		this.showOnlyFace = showOnlyFace;
 	}
 	
 	

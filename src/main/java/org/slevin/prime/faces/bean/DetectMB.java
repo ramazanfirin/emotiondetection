@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -28,6 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry;
+import com.github.sarxos.webcam.ds.ipcam.IpCamDriver;
+import com.github.sarxos.webcam.ds.ipcam.IpCamMode;
 
 
 
@@ -55,16 +59,24 @@ public class DetectMB implements Serializable {
 	private static final HaarCascadeDetector detector = new HaarCascadeDetector();
 	private List<DetectedFace> faces = null;
 	
+	static String cameraUrl="http://admin:1234@kgkamera1.myfreeip.me:8080/snapshot.jpg";
+	
 	@PostConstruct
     public void init() {
 		//refreshList();
+		Webcam.setDriver(new IpCamDriver());
+		try {
+			IpCamDeviceRegistry.register("KG_KAMERA_1", cameraUrl, IpCamMode.PULL);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 //		scheduler = Executors.newSingleThreadScheduledExecutor();
 //		scheduler.scheduleAtFixedRate(new TakePictureJob(), 0, 5, TimeUnit.SECONDS);
     }
 	
-	
-	
-	
+
 	
 	
 	public class TakePictureJob implements Runnable {
@@ -72,7 +84,10 @@ public class DetectMB implements Serializable {
 	    public void run() {
 	    	try {
 				
-	    		Webcam webcam = Webcam.getDefault();
+	    		
+	    		//IpCamDeviceRegistry.register("Lignano", "http://admin:1234@192.168.1.56/mjpg/video.mjpg", IpCamMode.PUSH);
+	    		
+	    		Webcam webcam = Webcam.getWebcams().get(0);
 	    		webcam.open();
 	    		BufferedImage image = webcam.getImage();
 	    		String fileName=System.currentTimeMillis()+".png";
@@ -87,7 +102,7 @@ public class DetectMB implements Serializable {
 	    		imageService.persist(imageObject);
 	    		
 	    		List<DetectedFace> faces = detector.detectFaces(ImageUtilities.createFImage(image));
-	    		imageObject.setFaceCount(new Long(faces.size()));
+	    		
 	    		if(faces.size()>0){
 	    			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    			ImageIO.write(image, "PNG", baos);
@@ -98,7 +113,7 @@ public class DetectMB implements Serializable {
 	    			String result = emotionService.sendFile(bytes);
 	    			List<Face> list = EmotionUtil.parseEmotionResult(result);
 	    			imageObject.getFacelist().addAll(list);
-	    			
+	    			imageObject.setFaceCount(new Long(list.size()));
 	    			
 	    			
 	    		}
