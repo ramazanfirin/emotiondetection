@@ -39,7 +39,7 @@
         
         <p:ajax event="rowSelect" listener="#{reportMB.onRowSelect}" update=":form:multiCarDetail" oncomplete="PF('multiCarDialog').show()"></p:ajax>
         <p:column headerText="Id">
-                 <p:graphicImage url="http://localhost:8080/snapshots/#{car.fileName}" cache="false" width="150" height="150"> </p:graphicImage>
+                 <p:graphicImage url="http://ec2-52-36-76-252.us-west-2.compute.amazonaws.com:8080/snapshots/#{car.fileName}" cache="false" width="150" height="150"> </p:graphicImage>
                
         </p:column>
         
@@ -61,7 +61,7 @@
 				
 				<p:dialog header="Emotions" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true" width="700">
         <p:outputPanel id="multiCarDetail" style="text-align:center;">
-             <p:graphicImage url="http://localhost:8080/snapshots/#{reportMB.selectedImage.fileName}" cache="false" rendered="#{not empty reportMB.selectedImage}"> </p:graphicImage>
+             <p:graphicImage url="http://ec2-52-36-76-252.us-west-2.compute.amazonaws.com:8080/snapshots/#{reportMB.selectedImage.fileName}" cache="false" rendered="#{not empty reportMB.selectedImage}"> </p:graphicImage>
              <p:dataTable var="car" value="#{reportMB.emotionList}" rows="10">
              
              	<p:column headerText="Face No">

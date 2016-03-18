@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -72,8 +73,8 @@ public class DetectMB implements Serializable {
 			e.printStackTrace();
 		}
 		
-//		scheduler = Executors.newSingleThreadScheduledExecutor();
-//		scheduler.scheduleAtFixedRate(new TakePictureJob(), 0, 5, TimeUnit.SECONDS);
+		scheduler = Executors.newSingleThreadScheduledExecutor();
+		scheduler.scheduleAtFixedRate(new TakePictureJob(), 0, 6, TimeUnit.SECONDS);
     }
 	
 
@@ -84,8 +85,15 @@ public class DetectMB implements Serializable {
 	    public void run() {
 	    	try {
 				
-	    		
-	    		//IpCamDeviceRegistry.register("Lignano", "http://admin:1234@192.168.1.56/mjpg/video.mjpg", IpCamMode.PUSH);
+	    		Calendar c = Calendar.getInstance();
+	    		int hourOfDay  = c.get(Calendar.HOUR_OF_DAY);
+	    		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+	    		System.out.println("hour ="+hourOfDay);
+	    			//IpCamDeviceRegistry.register("Lignano", "http://admin:1234@192.168.1.56/mjpg/video.mjpg", IpCamMode.PUSH);
+	    		if(hourOfDay<8 || hourOfDay>17)
+	    			return;
+	    		if(dayOfWeek==0 || dayOfWeek==7)
+	    			return;
 	    		
 	    		Webcam webcam = Webcam.getWebcams().get(0);
 	    		webcam.open();
